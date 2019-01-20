@@ -1,0 +1,68 @@
+#radioBox {
+  background-color: black;
+  border: solid 10px tomato;
+  padding: 50px;
+  margin-top: 200px;
+}
+#brand span {
+  width: 100%;
+  text-align: center;
+  margin-top: -50px;
+  font-size: 40px;
+  margin-bottom: 10px;
+}
+#station, #tunner {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+#station .btn,
+#tunner .btn {
+  width: 100px;
+  text-align: center;
+  padding: 10px;
+}
+#tunner {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: solid 4px gold;
+}
+#tuneText,
+#frequencyText,
+#volumeText {
+  font-size: 30px;
+  color: bisque;
+  text-align: center;
+  text-transform: uppercase;
+}
+#volumeText {
+  text-align: left;
+}
+p {
+  font-size: 20px;
+  color: bisque;
+  font-style: italic;
+  height: 45px;
+}
+#volumeControls {
+  margin-bottom: 30px;
+}
+#volumeControls .btn,
+#presetControls .btn {
+  width: 50px;
+  border-radius: 50%;
+  text-align: center;
+  font-size: 23px;
+  font-weight: 900;
+}
+#presetControls>.col-12 {
+  margin-bottom: -27px;
+}
+.power {
+  width: 100px;
+  height: 100px;
+  font-size: 30px;
+}
+.indicator {
+  width: 200px;
+  font-size: 60px;
+}
