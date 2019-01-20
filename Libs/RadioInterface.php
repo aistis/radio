@@ -37,19 +37,13 @@ interface RadioInterface
   'Russkoje radio Baltija' => '105,6',
   'M-1 plius' =>  '106,2'
   ]; 
-   // mano DB nustatymai, su tokiais aš tikrinsiu uždavinį.
-   // spręsdami galite naudoti savo nustatymus, bet galutiniame variante nustatymai turi būti būtent tokie
-  const dbUser = 'homestead';
-  const dbPassword = 'secret';
-  const dbHost = 'localhost';
+  
+  const dbUser = 'root';
+  const dbPassword = '123';
+  const dbHost = '127.0.0.1';
   const dbDataBase = 'radio';
   
-  // prod db data
-  // const dbUser = 'root';
-  // const dbPassword = '123';
-  // const dbHost = '127.0.0.1';
-  // const dbDataBase = 'radio';
-   //Indicators
+  //Indicators
   public function showTune($data);
   public function showRadioStationName($data);
   public function showVolume($data);

@@ -20,7 +20,7 @@ class Helper
     return header('Location: '.$url.'');
   }
   public function getPreset($pdo) {
-    $stmt = $pdo->query('SELECT * FROM presets WHERE preset_status = 1');
+    $stmt = $pdo->query('SELECT * FROM presets WHERE preset_current = 1');
     $row = $stmt->fetch();
     return $row;
   }

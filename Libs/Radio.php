@@ -2,10 +2,11 @@
 
 class Radio extends Box implements RadioInterface
 {
-    protected $serverName, $userName, $password, $dbname, $dsn, $pdo;
+    private $serverName, $userName, $password, $dbname, $dsn, $pdo;
     private $station, $volume, $stationsInArea;
 
     function __construct() {
+        parent::setDb();
         $pdo = Radio::pdo();
         parent::initiate($pdo);
     }
@@ -91,9 +92,9 @@ class Radio extends Box implements RadioInterface
         }
         else $firstStation = $fmList[0];
 
-        if ($lastStation == $currentFrequency) {
+        if ($lastStation == $currentFrequency || $currentFrequency >= RadioInterface::maxFm) {
             $pdo = Radio::pdo();     
-            $stmt = $pdo->query('UPDATE presets SET preset_status = 0, preset_current = 0 WHERE presets.preset_id != 4; UPDATE presets SET preset_status = 1, preset_current = 1, preset_frequency = '.$firstStation.' WHERE presets.preset_id = 4');
+            $stmt = $pdo->query('UPDATE presets SET preset_current = 0 WHERE presets.preset_id != 4; UPDATE presets SET preset_current = 1, preset_frequency = '.$firstStation.' WHERE presets.preset_id = 4');
         }
         else {
             if (!array_search($currentFrequency, $stations)){
@@ -101,7 +102,7 @@ class Radio extends Box implements RadioInterface
                     if ($value > $currentFrequency) {
                         //uzsetinu curent pagal rasta frequency
                         $pdo = Radio::pdo();     
-                        $stmt = $pdo->query('UPDATE presets SET preset_status = 0, preset_current = 0 WHERE presets.preset_id != 4; UPDATE presets SET preset_status = 1, preset_current = 1, preset_frequency = '.$value.' WHERE presets.preset_id = 4');
+                        $stmt = $pdo->query('UPDATE presets SET preset_current = 0 WHERE presets.preset_id != 4; UPDATE presets SET preset_current = 1, preset_frequency = '.$value.' WHERE presets.preset_id = 4');
                         break;
                     }
                 }
@@ -112,7 +113,7 @@ class Radio extends Box implements RadioInterface
                     if ($value > $currentFrequency) {
                         //uzsetinu curent pagal rasta frequency
                         $pdo = Radio::pdo();     
-                        $stmt = $pdo->query('UPDATE presets SET preset_status = 0, preset_current = 0 WHERE presets.preset_id != 4; UPDATE presets SET preset_status = 1, preset_current = 1, preset_frequency = '.$value.' WHERE presets.preset_id = 4');
+                        $stmt = $pdo->query('UPDATE presets SET preset_current = 0 WHERE presets.preset_id != 4; UPDATE presets SET preset_current = 1, preset_frequency = '.$value.' WHERE presets.preset_id = 4');
                         break;
                     }
                 }
@@ -144,9 +145,9 @@ class Radio extends Box implements RadioInterface
         }
         else $firstStation = $fmList[0];
 
-        if ($firstStation == $currentFrequency) {
+        if ($firstStation == $currentFrequency || $currentFrequency <= RadioInterface::minFm) {
             $pdo = Radio::pdo();     
-            $stmt = $pdo->query('UPDATE presets SET preset_status = 0, preset_current = 0 WHERE presets.preset_id != 4; UPDATE presets SET preset_status = 1, preset_current = 1, preset_frequency = '.$lastStation.' WHERE presets.preset_id = 4');
+            $stmt = $pdo->query('UPDATE presets SET preset_current = 0 WHERE presets.preset_id != 4; UPDATE presets SET preset_current = 1, preset_frequency = '.$lastStation.' WHERE presets.preset_id = 4');
         }
         else {
             if (!array_search($currentFrequency, $stations)){
@@ -154,7 +155,7 @@ class Radio extends Box implements RadioInterface
                     if ($value < $currentFrequency) {
                         //uzsetinu curent pagal rasta frequency
                         $pdo = Radio::pdo();     
-                        $stmt = $pdo->query('UPDATE presets SET preset_status = 0, preset_current = 0 WHERE presets.preset_id != 4; UPDATE presets SET preset_status = 1, preset_current = 1, preset_frequency = '.$value.' WHERE presets.preset_id = 4');
+                        $stmt = $pdo->query('UPDATE presets SET preset_current = 0 WHERE presets.preset_id != 4; UPDATE presets SET preset_current = 1, preset_frequency = '.$value.' WHERE presets.preset_id = 4');
                         break;
                     }
                 }
@@ -165,7 +166,7 @@ class Radio extends Box implements RadioInterface
                     if ($value < $currentFrequency) {
                         //uzsetinu curent pagal rasta frequency
                         $pdo = Radio::pdo();     
-                        $stmt = $pdo->query('UPDATE presets SET preset_status = 0, preset_current = 0 WHERE presets.preset_id != 4; UPDATE presets SET preset_status = 1, preset_current = 1, preset_frequency = '.$value.' WHERE presets.preset_id = 4');
+                        $stmt = $pdo->query('UPDATE presets SET preset_current = 0 WHERE presets.preset_id != 4; UPDATE presets SET preset_current = 1, preset_frequency = '.$value.' WHERE presets.preset_id = 4');
                         break;
                     }
                 }
@@ -222,15 +223,15 @@ class Radio extends Box implements RadioInterface
     }
     public function loadPresets1(){
         $pdo = Radio::pdo();     
-        $stmt = $pdo->query('UPDATE `presets` SET `preset_status` = 0, `preset_current` = 0 WHERE `presets`.`preset_id` != 1; UPDATE `presets` SET `preset_status` = 1, `preset_current` = 1 WHERE `presets`.`preset_id` = 1');
+        $stmt = $pdo->query('UPDATE `presets` SET `preset_current` = 0 WHERE `presets`.`preset_id` != 1; UPDATE `presets` SET `preset_current` = 1 WHERE `presets`.`preset_id` = 1');
     }
     public function loadPresets2(){
         $pdo = Radio::pdo();     
-        $stmt = $pdo->query('UPDATE `presets` SET `preset_status` = 0, `preset_current` = 0 WHERE `presets`.`preset_id` != 2; UPDATE `presets` SET `preset_status` = 1, `preset_current` = 1 WHERE `presets`.`preset_id` = 2');
+        $stmt = $pdo->query('UPDATE `presets` SET `preset_current` = 0 WHERE `presets`.`preset_id` != 2; UPDATE `presets` SET `preset_current` = 1 WHERE `presets`.`preset_id` = 2');
     }
     public function loadPresets3(){
         $pdo = Radio::pdo();     
-        $stmt = $pdo->query('UPDATE `presets` SET `preset_status` = 0, `preset_current` = 0 WHERE `presets`.`preset_id` != 3; UPDATE `presets` SET `preset_status` = 1, `preset_current` = 1 WHERE `presets`.`preset_id` = 3');
+        $stmt = $pdo->query('UPDATE `presets` SET `preset_current` = 0 WHERE `presets`.`preset_id` != 3; UPDATE `presets` SET `preset_current` = 1 WHERE `presets`.`preset_id` = 3');
     }
     public function pdo() {
         $pdo = parent::open();
@@ -238,7 +239,7 @@ class Radio extends Box implements RadioInterface
     }
     public function getStation() {
         $pdo = Radio::pdo();
-        $stmt = $pdo->query('SELECT * FROM presets WHERE preset_status = 1');
+        $stmt = $pdo->query('SELECT * FROM presets WHERE preset_current = 1');
         $row = $stmt->fetch();
         return $row;
     }
@@ -255,6 +256,6 @@ class Radio extends Box implements RadioInterface
         $row = $stmt->fetch();
         $volume = $row->preset_volume;
         $frequency = $row->preset_frequency;
-        $stmt = $pdo->query('UPDATE presets SET preset_status = 0, preset_current = 0 WHERE presets.preset_id != 4; UPDATE presets SET preset_status = 1, preset_current = 1, preset_frequency ='.$frequency.', preset_volume = '.$volume.' WHERE presets.preset_id = 4');
+        $stmt = $pdo->query('UPDATE presets SET preset_current = 0 WHERE presets.preset_id != 4; UPDATE presets SET preset_current = 1, preset_frequency ='.$frequency.', preset_volume = '.$volume.' WHERE presets.preset_id = 4');
     }
 }

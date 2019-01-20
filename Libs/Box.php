@@ -1,10 +1,21 @@
 <?php
 
 class Box extends Helper
-{   protected $pdo;
+{   
+    private $pdo;
+
     function __construct() {
     }
-
+    protected function setDb() {
+        $dsn = 'mysql:host='.RadioInterface::dbHost.'';
+        $pdo = new PDO($dsn, RadioInterface::dbUser, RadioInterface::dbPassword);
+        
+        // Create database
+        $sql = 'CREATE DATABASE IF NOT EXISTS '.RadioInterface::dbDataBase.'';
+        if (!$pdo->query($sql)) {
+            echo 'Error creating database';
+        }
+    }
     protected function open() {
         
         // DB settings
@@ -12,14 +23,13 @@ class Box extends Helper
         $serverName = RadioInterface::dbHost;
         $userName = RadioInterface::dbUser;
         $password = RadioInterface::dbPassword;
-        $dbname = RadioInterface::dbDataBase;    
+        $dbname = RadioInterface::dbDataBase;
         
         // set DSN
-        
         $dsn = 'mysql:host='.$serverName.'; dbname='.$dbname;
-
+        
         // create a PDO instance
-
+        
         $pdo = new PDO($dsn, $userName, $password);
         $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
         
@@ -30,7 +40,7 @@ class Box extends Helper
         return $pdo;
     }
     protected function initiate($pdo) {
-         
+        
         // Check if tabe is created
         
         if (parent::tableExists($pdo, 'presets') == false) {
@@ -44,7 +54,6 @@ class Box extends Helper
                     preset_id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                     preset_frequency DECIMAL(10,1) NOT NULL,
                     preset_volume DECIMAL(10,1) NOT NULL,
-                    preset_status BOOLEAN NOT NULL,
                     preset_current BOOLEAN NOT NULL,
                     preset_set TIMESTAMP
                     )";
@@ -57,10 +66,9 @@ class Box extends Helper
 
             // seed data
             
-            $sql = 'INSERT INTO `presets` (`preset_id`, `preset_frequency`, `preset_volume`, `preset_status`, `preset_current`) VALUES (NULL, 88.0, 10, 1, 0), (NULL, 88.0, 10, 1, 0), (NULL, 88.0, 10, 1, 0), (NULL, 88.0, 10, 1, 1) ';
+            $sql = 'INSERT INTO `presets` (`preset_id`, `preset_frequency`, `preset_volume`, `preset_current`) VALUES (NULL, 88.0, 10, 0), (NULL, 88.0, 10, 0), (NULL, 88.0, 10, 0), (NULL, 88.0, 10, 1) ';
                 $stmt = $pdo->prepare($sql);
                 $stmt->execute();
-                print("Initial <strong>PRESETS</strong> created.\n</br>");
         }
         return $pdo;
     }
