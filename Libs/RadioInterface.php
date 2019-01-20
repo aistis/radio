@@ -40,9 +40,9 @@ interface RadioInterface
   
  // tet db data
   
-  const dbUser = 'homestead';
-  const dbPassword = 'secret';
-  const dbHost = 'localhost';
+  const dbUser = 'root';
+  const dbPassword = '123';
+  const dbHost = '127.0.0.1';
   const dbDataBase = 'radio';
 
   
